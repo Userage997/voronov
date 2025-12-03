@@ -201,8 +201,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, observerOptions);
     
-    // Наблюдаем за карточками работ и друзей
-    document.querySelectorAll('.work-card, .friend-card, .stat-card').forEach(card => {
+    // Наблюдаем за карточками друзей и статистикой
+    document.querySelectorAll('.friend-card, .stat-card').forEach(card => {
         observer.observe(card);
     });
     
