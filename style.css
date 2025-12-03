@@ -221,6 +221,7 @@ body {
     height: 100%;
     object-fit: cover;
     border-radius: 50%;
+    display: block;
 }
 
 .nickname-container {
@@ -610,6 +611,79 @@ body {
     font-size: 2.5rem;
     font-weight: 700;
     color: white;
+    overflow: hidden;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.friend-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.friend-avatar.orange-bg {
+    background: linear-gradient(135deg, #ff8c00, #ff5e00);
+}
+
+.friend-avatar .friend-initials {
+    position: relative;
+    z-index: 1;
+}
+
+.friend-card:hover .friend-avatar {
+    transform: scale(1.05);
+    border-color: rgba(131, 56, 236, 0.5);
+    transition: transform 0.3s, border-color 0.3s;
+}
+
+.friend-card:hover .friend-avatar.orange-bg {
+    border-color: rgba(255, 140, 0, 0.5);
+}
+
+@keyframes fadeInAvatar {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.avatar-placeholder img,
+.friend-avatar img {
+    animation: fadeInAvatar 0.8s ease-out forwards;
+}
+
+.avatar-frame:hover .avatar-placeholder img {
+    transform: scale(1.05);
+    transition: transform 0.5s ease;
+}
+
+.friend-avatar::before {
+    content: attr(data-initials);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #3a86ff, #8338ec);
+    color: white;
+    font-size: 2rem;
+    font-weight: 700;
+    z-index: 0;
+}
+
+.friend-avatar.orange-bg::before {
+    background: linear-gradient(135deg, #ff8c00, #ff5e00);
 }
 
 .friend-name {
@@ -799,6 +873,20 @@ body {
         grid-template-columns: 1fr;
         gap: 30px;
     }
+    
+    .avatar-frame {
+        width: 180px;
+        height: 180px;
+    }
+    
+    .friend-avatar {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .friend-avatar::before {
+        font-size: 1.5rem;
+    }
 }
 
 @media (max-width: 576px) {
@@ -823,15 +911,24 @@ body {
     }
     
     .avatar-frame {
-        width: 180px;
-        height: 180px;
+        width: 150px;
+        height: 150px;
     }
     
     .avatar-placeholder {
         font-size: 4rem;
     }
     
+    .friend-avatar {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .friend-avatar::before {
+        font-size: 1.2rem;
+    }
+    
     .work-card, .friend-card, .stat-card {
         padding: 20px;
     }
-        }
+}
