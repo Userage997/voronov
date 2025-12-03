@@ -6,6 +6,42 @@ document.addEventListener('DOMContentLoaded', function() {
         nickname.style.animation = 'fadeInUp 1.5s forwards';
     }, 500);
     
+    // Мобильное меню
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const navMenu = document.querySelector('.nav-menu');
+    
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            this.innerHTML = navMenu.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Закрытие меню при клике на ссылку
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    navMenu.classList.remove('active');
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+        });
+        
+        // Адаптация меню при изменении размера окна
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                navMenu.classList.remove('active');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                navMenu.style.display = '';
+            } else {
+                if (!navMenu.classList.contains('active')) {
+                    navMenu.style.display = 'none';
+                }
+            }
+        });
+    }
+    
     // Плавная прокрутка по якорям
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
@@ -26,6 +62,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     link.classList.remove('active');
                 });
                 this.classList.add('active');
+                
+                // Закрытие мобильного меню после клика
+                if (window.innerWidth <= 768 && navMenu) {
+                    navMenu.classList.remove('active');
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
             }
         });
     });
@@ -116,45 +158,6 @@ document.addEventListener('DOMContentLoaded', function() {
         loadImage(img, projectPlaceholder, imageUrl);
     };
     
-    // Мобильное меню
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const navMenu = document.querySelector('.nav-menu');
-    
-    if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', function() {
-            navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
-            if (navMenu.style.display === 'flex') {
-                navMenu.style.flexDirection = 'column';
-                navMenu.style.position = 'absolute';
-                navMenu.style.top = '100%';
-                navMenu.style.left = '0';
-                navMenu.style.width = '100%';
-                navMenu.style.backgroundColor = 'rgba(0, 0, 0, 0.95)';
-                navMenu.style.padding = '20px';
-                navMenu.style.gap = '20px';
-                navMenu.style.borderTop = '1px solid #222';
-            }
-        });
-        
-        // Закрытие меню при клике на ссылку
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function() {
-                if (window.innerWidth <= 768) {
-                    navMenu.style.display = 'none';
-                }
-            });
-        });
-        
-        // Адаптация меню при изменении размера окна
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                navMenu.style.display = '';
-            } else {
-                navMenu.style.display = 'none';
-            }
-        });
-    }
-    
     // Анимация заполнения skill-bars при скролле
     const skillBars = document.querySelectorAll('.skill-level');
     const skillBarObserver = new IntersectionObserver(function(entries) {
@@ -184,6 +187,29 @@ document.addEventListener('DOMContentLoaded', function() {
     if (yearElement) {
         yearElement.textContent = yearElement.textContent.replace('2025', currentYear);
     }
+    
+    // Исправление для стрелочки на мобильных устройствах
+    function adjustScrollIndicator() {
+        const heroSubtitle = document.querySelector('.hero-subtitle');
+        const scrollIndicator = document.querySelector('.scroll-indicator-container');
+        
+        if (window.innerWidth <= 768) {
+            // На мобильных добавляем отступ, чтобы стрелочка не наезжала на текст
+            if (heroSubtitle && scrollIndicator) {
+                const subtitleHeight = heroSubtitle.offsetHeight;
+                scrollIndicator.style.bottom = Math.max(30, 20 + subtitleHeight / 2) + 'px';
+            }
+        } else {
+            // На десктопе возвращаем обычное положение
+            if (scrollIndicator) {
+                scrollIndicator.style.bottom = '40px';
+            }
+        }
+    }
+    
+    // Вызываем при загрузке и изменении размера окна
+    adjustScrollIndicator();
+    window.addEventListener('resize', adjustScrollIndicator);
     
     // Индикатор загрузки
     window.addEventListener('load', function() {
